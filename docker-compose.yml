@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+    backend:
+        build:
+            context: ./backend
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./backend:/app # Sync local changes to the container
+            - /app/node_modules
+        environment:
+            - NODE_ENV=development
+            - DB_HOST=postgres
+            - DB_PORT=5432
+            - DB_USER=postgres
+            - DB_PASSWORD=mysecretpassword
+            - DB_NAME=mydatabase
+            - PORT=3000
+            - JWT_SECRET=bad62e9bd06aaef5e47d865561b5294d08c219e1e0b9e47ff25f2e0451b589737e78c993c89ddba4ac33fe42993abfc001ee590f05470fac52880b6de4269b8ba63da5c8197332639cadfa5017f5a281de4e6f66dcae9bb691b2210f0150a3d94439eae8e80029a65bd6814fa58ee0ca81a6a3283703161b45be07683556866d
+            - JWT_EXPIRES_IN=1h
+        depends_on:
+            - postgres
+
+    frontend:
+        build:
+            context: ./todo-frontend
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./todo-frontend:/app
+            - /app/node_modules # Prevent host and container node_modules conflicts
+        command: npm run dev
+
+    postgres:
+        image: postgres:13
+        container_name: postgres
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=mysecretpassword
+            - POSTGRES_DB=mydatabase
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./_db/init:/docker-entrypoint-initdb.d
+
+volumes:
+    postgres_data:
