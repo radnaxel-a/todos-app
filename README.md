@@ -2,7 +2,7 @@
 
 ### Description
 
-In the following repository you will an sample **non-production ready** sample solution on a todo app build with svelte and ionic for the front end and a custom express library for the back-end
+In the following repository you will find an sample **non-production ready** sample solution on a todo app build with svelte and ionic for the front end and a custom express library for the back-end
 
 ### Starting up
 
